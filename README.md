@@ -1,9 +1,9 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 ### book-library-system
 
-## Available Scripts
+### Available Scripts
 
-**Note: Use either npm or yarn as package manager **
+**Note: Use either npm or yarn as package manager**
 
 In the project directory, you can run:
 
