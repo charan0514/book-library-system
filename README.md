@@ -3,7 +3,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ### Available Scripts
 
-**Note: Use either npm or yarn as package manager**
+**Note: Use either `npm` or `yarn` as package manager**
 
 In the project directory, you can run:
 
