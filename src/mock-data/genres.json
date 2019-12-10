@@ -1,0 +1,21 @@
+[
+    {
+        "id": "fantasy",
+        "name": "Fantasy"
+    }, {
+        "id": "scienceFiction",
+        "name": "Science fiction"
+    }, {
+        "id": "thriller",
+        "name": "Thriller"
+    }, {
+        "id": "mystery",
+        "name": "Mystery"
+    }, {
+        "id": "childrenLiterature",
+        "name": "Children's literature"
+    }, {
+        "id": "adultLiterature",
+        "name": "Adult literature"
+    }
+]
