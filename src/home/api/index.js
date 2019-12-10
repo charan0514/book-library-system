@@ -8,7 +8,6 @@ export const getGenres = (payload) => {
   // fetch(`../../mock-data/genres.json`, {
   //     method: "GET",
   // }).then (response => response.json()).then(json => {
-  //   console.log('**** data ', json)
   // })
   return fetch(`https://api.myjson.com/bins/1h2gcg`, {
     method: "GET"

@@ -2,36 +2,10 @@ import React from 'react'
 import Container from './container'
 import {ContainerStyled, GenreCard, GenreWrapper, Button} from './styles'
 import Loader from '../loader'
-import Books from '../mock-data/books'
 import AddBookModal from './AddBooksModal'
-import EditBookModal from './EditBookModal'
+import UpdateBookModal from './UpdateBookModal'
 import {debounce} from 'lodash';
 import PencilIcon from '../images/pencil.png'
-
-// const bookList = {
-//     fantasy: [
-//         {
-//             "id": "1",
-//             "name": "fantasy fantasy fantasy",
-//             "count": 1
-//         }, {
-//             "id": "2",
-//             "name": "fantasy fantasy fantasy",
-//             "count": 4
-//         }
-//     ],
-//     thriller: [
-//         {
-//             "id": "3",
-//             "name": "thriller thriller thriller",
-//             "count": 5
-//         }, {
-//             "id": "4",
-//             "name": "thriller thriller thriller",
-//             "count": 2
-//         }
-//     ]
-// }
 
 class Home extends React.Component  {
 
@@ -39,7 +13,7 @@ class Home extends React.Component  {
         super(props);
         this.state = {
             showAddBookModal: false,
-            showEditBookModal: false,
+            currentBookDetails: null,
             searchText: "",
             releventBookList: {},
             bookListUpdated: false
@@ -56,12 +30,12 @@ class Home extends React.Component  {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        // const {bookList} = this.props
-        // if (!!bookList && prevProps.bookList !== bookList) {
-        //     this.setState({
-        //         releventBookList: bookList
-        //     })
-        // }
+        const {bookList} = this.props
+        if (!!bookList && prevProps.bookList !== bookList) {
+            this.setState({
+                releventBookList: bookList
+            })
+        }
     }
 
     debounceHandler = debounce((val) => { 
@@ -113,51 +87,84 @@ class Home extends React.Component  {
     }
     
 
-    onAddNewBookSuccess = () => {
-        this.setState({
-            bookListUpdated: true
-        })
+    onBookListUpdate = () => {
+        // const {bookList} = this.props
+        // this.setState({
+        //     searchText: "",
+        //     releventBookList: bookList
+        // })
     }
 
-    openEditBooksModal = () => {
+    openEditBooksModal = (book) => {
         this.setState({
-            showEditBookModal: true
+            currentBookDetails: book
         })
     }
 
     closeEditBooksModal = () => {
         this.setState({
-            showEditBookModal: false
+            currentBookDetails: null
         })
+    }
+
+    addNewBooks = (bookDetails) => {
+        const {ActionUpdateBookList, bookList} = this.props
+        const copy = JSON.parse(JSON.stringify(bookList))
+        if (!copy[bookDetails.bookGenre]) {
+            copy[bookDetails.bookGenre] = []
+        }
+        copy[bookDetails.bookGenre].unshift({
+            bookId: new Date().getTime().toString(),
+            name: bookDetails.bookName, 
+            count: bookDetails.bookCount,
+            author: bookDetails.bookAuthor,
+            description: bookDetails.bookDescr,
+        })
+        ActionUpdateBookList(copy)
+        this.closeAddBooksModal()
+    }
+
+    updateBookDetails = (bookDetails) => {
+        const {ActionUpdateBookList, bookList} = this.props
+        const copy = JSON.parse(JSON.stringify(bookList))
+        const {bookGenre} = bookDetails
+    
+        const index = copy[bookGenre].findIndex(n => n.bookId === bookDetails.bookId)
+        copy[bookGenre].splice(index, 1, bookDetails)
+
+        ActionUpdateBookList(copy)
+        this.closeEditBooksModal()
     }
 
 
     render () {
         const {isLoading, genres, bookList} = this.props
-        const {showAddBookModal, searchText, releventBookList, showEditBookModal} = this.state
-
+        const {showAddBookModal, searchText, releventBookList, currentBookDetails} = this.state
         return (
             <ContainerStyled>
-                {showAddBookModal && <AddBookModal closeAddBooksModal={this.closeAddBooksModal} onAddNewBookSuccess={this.onAddNewBookSuccess}/>}
-                {showEditBookModal && <EditBookModal closeEditBooksModal={this.closeEditBooksModal} />}
+                {showAddBookModal && <AddBookModal closeAddBooksModal={this.closeAddBooksModal} onBookListUpdate={this.onBookListUpdate}/>}
+                {currentBookDetails && <UpdateBookModal closeEditBooksModal={this.closeEditBooksModal} onBookListUpdate={this.onBookListUpdate} bookDetails={currentBookDetails}/>}
                 {isLoading && <Loader />}
                 <div className="top-actions">
-                    <input className="search-book-input" type="serach" value={searchText} onChange={this.onSearchText}/>
+                    <div>
+                        {/* <label htmlFor="serachBook" className="search-book-label">Search by Name</label> */}
+                        <input id="serachBook" placeholder="Search book by name" className="search-book-input" type="serach" value={searchText} onChange={this.onSearchText}/>
+                    </div>
                     <Button className="add-book-btn" onClick={this.openAddBooksModal}>Add Books</Button>
                 </div>
-                {!!genres && !!genres.length && <GenreWrapper>
+                {!!genres && !!genres.length && <div className="grid-outer"><GenreWrapper>
                     {genres.map(genre => <GenreCard key={genre.id}>
                         <div className="genre-name">{genre.name}</div>
                         <div className="genre-books">
                             {(!!releventBookList[genre.id] && !!releventBookList[genre.id].length) ? releventBookList[genre.id].map(book => 
                                 <div className="book-name-count" key={book.id}>
                                     <span className="book-name">{book.name}</span>
-                                    <img src={PencilIcon} alt="edit" className="edit-book-icon" onClick={this.openEditBooksModal}/>
+                                    <img src={PencilIcon} alt="edit" className="edit-book-icon" onClick={(e) => this.openEditBooksModal(book)}/>
                                 </div>
                             ) : <div className="no-books-msg">No books present</div>}
                         </div>
                     </GenreCard>)}
-                </GenreWrapper>}
+                </GenreWrapper></div>}
             </ContainerStyled>
         );
     }

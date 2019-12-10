@@ -7,7 +7,7 @@ export function ActionFetchGenres (data) {
     }
 }
 
-export function ActionAddBooks (data) {
+export function ActionUpdateBookList (data) {
     return {
         type: UPDATE_ALL_BOOKS,
         data

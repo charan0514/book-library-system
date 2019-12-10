@@ -35,3 +35,17 @@ const addBooksMapDispatchToProps = (dispatch) => {
 
 export const AddBooksContainer = connect(addBooksMapStateToProps, addBooksMapDispatchToProps)
 
+
+const editBooksMapStateToProps = (state) => {
+  return {
+      genres : getGenreFetchSuccess(state),
+      bookList: getBookListSuccess(state)
+  }
+}
+
+const editBooksMapDispatchToProps = (dispatch) => {
+  return bindActionCreators({...loginActions}, dispatch)
+}
+
+export const EditBooksContainer = connect(editBooksMapStateToProps, editBooksMapDispatchToProps)
+

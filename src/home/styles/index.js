@@ -4,7 +4,6 @@ const DeviceWidth = "800px"
 
 export const ContainerStyled = styled.div `
     height: 100%;
-    margin: 20px;
     position: relative;
     overflow-y: hidden;
 
@@ -12,18 +11,34 @@ export const ContainerStyled = styled.div `
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
-        position: sticky;
-        width: 100%;
-        left: 0;
-        top: 20px;
+        // left: 0;
+        // top: 20px;
+        padding: 0px 20px;
         height: 40px;
+        position: fixed;
+        width: -moz-calc(100% - 40px);
+        width: -webkit-calc(100% - 40px);
+        width: calc(100% - 40px);
+        z-index: 99;
+        background-color: #ccc5c7;
     }
     .search-book-input {
-        min-width: 200px;
+        min-width: 160px;
         height: 30px;
+        background-color: #dfe8e8;
+    }
+    .search-book-label {
+        padding: 5px;
+        font-size: 12px;
     }
     .add-book-btn {
+    }
+    .grid-outer {
+        margin: 20px;
+        margin-top: 60px;
+        overflow: auto;
+        position: relative;
+        margin-bottom: 100px;
     }
 `
 
@@ -41,8 +56,6 @@ export const GenreWrapper = styled.div `
     justify-content: space-around;
     grid-row-gap: 20px;
     justify-content: space-between;
-    overflow-y: auto;
-    margin-bottom: 100px;
     // top: 20px;
     // position: relative;
 
@@ -92,7 +105,7 @@ export const GenreCard = styled.div `
 
 export const ModalStyled = styled.div `
     position: fixed;
-    z-index: 99;
+    z-index: 999;
     left: 0;
     top: 0;
     width: 100%;
@@ -107,6 +120,7 @@ export const AddBooksStyled = styled.div `
     width: 80%;
     margin: 20px auto;
     padding: 0px 20px;
+    overflow: auto;
 
     .header {
         display: flex;
@@ -135,14 +149,8 @@ export const AddBooksStyled = styled.div `
         .add-books-btn-wrapper {
             display: flex;
             justify-content: center;
-            margin-top : 40px;
+            padding: 40px 0px;
+            border-top: 1px solid grey;
         }
     } 
-`
-export const EditBooksStyled = styled. div `
-    background-color: white;
-    height: 90%;
-    width: 80%;
-    margin: 20px auto;
-    padding: 0px 20px;
 `

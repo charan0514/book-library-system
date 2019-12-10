@@ -1,5 +1,4 @@
 import React from 'react'
-//import Modal from '../../Widgets/Modal'
 
 import {
   SpinnerContainer,
@@ -17,9 +16,6 @@ class Loader extends React.Component {
 
   render () {
     return (
-      // <Modal>
-      // { this.renderLoader() }
-      // </Modal>
       <SpinnerContainer>
         <LoadingSpinner />
       </SpinnerContainer>

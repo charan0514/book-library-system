@@ -1,39 +1,31 @@
 import React from 'react'
 import {AddBooksStyled, Button, ModalStyled} from './styles'
-import {AddBooksContainer} from './container'
+import {EditBooksContainer} from './container'
 import Loader from '../loader'
 
-class EditBooksModal extends React.Component {
+class UpdateBookModal extends React.Component {
 
     constructor (props) {
         super(props)
+        const {bookDetails} = props;
         this.state= {
-            bookName: "",
-            bookGenre: "",
-            bookDescr: "",
-            bookCount: "",
-            bookAuthor: ""
+            bookName: bookDetails.name,
+            bookGenre: bookDetails.genre,
+            bookDescr: bookDetails.description,
+            bookCount: bookDetails.count,
+            bookAuthor: bookDetails.author
         }
     }
 
     updateBookDetails = () => {
         const {bookName, bookGenre, bookDescr, bookCount, bookAuthor} = this.state
-        const {ActionAddBooks, bookList, genres, closeAddBooksModal, onAddNewBookSuccess} = this.props
+        const {ActionUpdateBookList, bookList, genres, closeEditBooksModal, onBookListUpdate, bookDetails} = this.props
         const copy = JSON.parse(JSON.stringify(bookList))
-        if (!copy[bookGenre]) {
-            copy[bookGenre] = []
-        }
-        copy[bookGenre].unshift({
-            id: new Date().getTime().toString(),
-            name: bookName, 
-            count: bookCount,
-            author: bookAuthor,
-            description: bookDescr,
-
-        })
-        ActionAddBooks(copy)
-        closeAddBooksModal()
-        onAddNewBookSuccess()
+        const index = copy[bookGenre].findIndex(n => n.id === bookDetails.id)
+        copy[bookGenre].splice(index, 1, {id: bookDetails.id, name: bookName, genre: bookGenre, description: bookDescr, count: bookCount, author: bookAuthor})
+        ActionUpdateBookList(copy)
+        closeEditBooksModal()
+        onBookListUpdate()
     }
 
     onNameChange = (e) => {
@@ -62,7 +54,7 @@ class EditBooksModal extends React.Component {
 
     onCountChange = (e) => {
         this.setState({
-            bookCount: e.target.valuesß
+            bookCount: e.target.value
         })
     }
 
@@ -73,17 +65,17 @@ class EditBooksModal extends React.Component {
             {isLoading && <Loader />}
             <AddBooksStyled className="gdfg">
                 <div className="header">
-                    <h4 className="title">Edit Books</h4>
+                    <h4 className="title">Update Book Details</h4>
                     <span className="close-icon" onClick={closeEditBooksModal}>X</span>
                 </div>
                 <div className="add-items-wrapper">
                     <div className="add-items">
-                        <label htmlFor="bookName" className="item-label">Book Name</label>
+                        <label className="item-label">Book Name</label>
                         <input value={bookName} className="item-input" type="text" autoFocus={true} onChange={this.onNameChange}/>
                     </div>
                     <div className="add-items">
-                        <label htmlFor="bookName" className="item-label">Genre</label>
-                        <select className="item-input" value={bookGenre} onChange={this.onGenreChange}>
+                        <label className="item-label">Genre</label>
+                        <select className="item-input" value={bookGenre} onChange={this.onGenreChange} disabled>
                             <option value="">None</option>
                             {genres.map(n => 
                                 <option key={n.id} value={n.id}>{n.name}</option>
@@ -91,15 +83,15 @@ class EditBooksModal extends React.Component {
                         </select>
                     </div>
                     <div className="add-items">
-                        <label htmlFor="bookName" className="item-label">Book Description</label>
+                        <label className="item-label">Book Description</label>
                         <textarea value={bookDescr} className="item-input" type="textarea" rows="4" onChange={this.onDescrChange}/>
                     </div>
                     <div className="add-items">
-                        <label htmlFor="bookName" className="item-label">Author</label>
+                        <label className="item-label">Author</label>
                         <input className="item-input" value={bookAuthor} type="text" onChange={this.onAuthorChange}/>
                     </div>
                     <div className="add-items">
-                        <label htmlFor="bookName" className="item-label">Count</label>
+                        <label className="item-label">Count</label>
                         <input value={bookCount} className="" step="1" min="1" type="number" onChange={this.onCountChange}/>
                     </div>
                     <div className="add-books-btn-wrapper">
@@ -111,4 +103,4 @@ class EditBooksModal extends React.Component {
     }
 }
 
-export default EditBooksModal
+export default EditBooksContainer(UpdateBookModal)

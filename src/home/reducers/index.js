@@ -37,13 +37,6 @@ export default function Main(state = initState, action) {
         isGenresFetchError: true
       }
     }
-    
-    // case UPDATE_BOOKS_BY_GENRE: {
-    //   return {
-    //     ...state,
-    //     bookList: {...state.}
-    //   }
-    // }
 
     case UPDATE_ALL_BOOKS: {
       return {
